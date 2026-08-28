@@ -3,18 +3,34 @@
 AI-powered Recruitment Intelligence Dashboard — a production-style portfolio project for recruiter analytics, candidate intelligence, job matching, and hiring insights.
 
 ## Stack
-- Frontend: React + Vite 8 + Bootstrap 5.3 + Recharts
+- Frontend: React + Vite 7 + Bootstrap 5.3 + Recharts
 - Backend: FastAPI + SQLAlchemy 2 + PostgreSQL
 - Analytics/ML: Pandas + NumPy + Scikit-learn
-- AI: OpenAI API (Phase 4)
+- AI: OpenAI API (planned for Hiring Copilot)
 
-## Phase 1
-This starter includes:
+## Progress
+### Phase 1 — Foundation ✅
 - PostgreSQL schema for jobs, candidates, applications and interviews
-- FastAPI health and recruitment KPI APIs
+- FastAPI health and dashboard API
 - Seed data with realistic recruitment records
-- React dashboard with KPI cards, hiring funnel, trends and candidate table
+- React recruiter dashboard
 - Docker Compose for PostgreSQL
+
+### Phase 2 — Product UI ✅
+- Candidates intelligence screen with filtering and profile drawer
+- Jobs intelligence screen
+- Applications pipeline screen
+- Interview operations screen
+- Recruitment analytics screen
+- AI Hiring Copilot preview
+- Responsive enterprise-style UI
+
+### Phase 3 — Live Data Layer ✅
+- REST endpoints for candidates, jobs, applications, interviews and analytics
+- Search and filter parameters for candidates and jobs
+- React service layer connected to FastAPI
+- Candidate, jobs, applications, interviews and analytics pages now read from PostgreSQL
+- Live pipeline counts and recruitment metrics
 
 ## Run locally
 
@@ -34,6 +50,8 @@ python -m app.db.seed
 uvicorn app.main:app --reload --port 8000
 ```
 
+API docs: http://localhost:8000/docs
+
 ### 3. Frontend
 ```bash
 cd frontend
@@ -43,5 +61,16 @@ npm run dev
 
 Open http://localhost:5173
 
-API docs: http://localhost:8000/docs
-# hiresense-ai
+## API endpoints
+- `GET /api/health`
+- `GET /api/dashboard`
+- `GET /api/candidates?search=&stage=&role=`
+- `GET /api/jobs?search=&status=`
+- `GET /api/applications`
+- `GET /api/interviews`
+- `GET /api/analytics`
+
+## Upcoming phases
+- Phase 4: Resume parsing, skill extraction and candidate-job matching
+- Phase 5: AI Hiring Copilot with explainable recommendations
+- Phase 6: Authentication, testing and deployment
