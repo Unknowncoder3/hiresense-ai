@@ -33,3 +33,11 @@ export function getLatestResume(candidateId) { return request(`/resume/${candida
 export function matchCandidate(candidateId, jobId) {
   return request(`/resume/match/${candidateId}/${jobId}`, { method: 'POST' })
 }
+
+export function askCopilot(question) {
+  return request('/ai/copilot', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question }),
+  })
+}
