@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
+from app.services.copilot import ask_copilot
 from app.services.dashboard import get_dashboard
 from app.services.recruitment import analytics, list_applications, list_candidates, list_interviews, list_jobs
 
@@ -50,3 +51,9 @@ def interviews(db: Session = Depends(get_db)):
 @router.get("/analytics")
 def recruitment_analytics(db: Session = Depends(get_db)):
     return analytics(db)
+
+
+@router.post("/ai/copilot")
+def copilot(payload: dict, db: Session = Depends(get_db)):
+    question = str(payload.get("question", ""))
+    return ask_copilot(db, question)
