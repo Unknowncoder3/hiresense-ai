@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { askCopilot } from '../services/api'
+import './ai-copilot.css'
 
 const suggestions = [
   'Which candidates are strongest for Data Analyst?',
