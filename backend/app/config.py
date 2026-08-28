@@ -1,5 +1,5 @@
-import secrets
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://hiresense:hiresense@localhost:5432/hiresense"
@@ -11,9 +11,21 @@ class Settings(BaseSettings):
     auth_token_hours: int = 8
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    def effective_database_url(self) -> str:
+        """Normalize common hosted Postgres URL schemes for psycopg v3."""
+        url = self.database_url.strip()
+        if url.startswith("postgres://"):
+            return "postgresql+psycopg://" + url[len("postgres://") :]
+        if url.startswith("postgresql://"):
+            return "postgresql+psycopg://" + url[len("postgresql://") :]
+        if url.startswith("postgresql+psycopg2://"):
+            return "postgresql+psycopg://" + url[len("postgresql+psycopg2://") :]
+        return url
+
     def effective_auth_secret(self) -> str:
         return self.auth_secret or "hiresense-development-secret-change-me"
 
+
 settings = Settings()
-# Keep the development fallback simple; deployments must provide AUTH_SECRET.
+settings.database_url = settings.effective_database_url()
 settings.auth_secret = settings.effective_auth_secret()
