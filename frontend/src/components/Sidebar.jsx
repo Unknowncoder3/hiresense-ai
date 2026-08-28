@@ -1,5 +1,5 @@
 export default function Sidebar({active='Dashboard', setActive}){
-  const items=[['Dashboard','bi-grid-1x2-fill'],['Candidates','bi-people-fill'],['Jobs','bi-briefcase-fill'],['Applications','bi-kanban-fill'],['Interviews','bi-calendar2-check-fill'],['Analytics','bi-bar-chart-fill'],['AI Insights','bi-stars']]
+  const items=[['Dashboard','bi-grid-1x2-fill'],['Candidates','bi-people-fill'],['Jobs','bi-briefcase-fill'],['Applications','bi-kanban-fill'],['Interviews','bi-calendar2-check-fill'],['Analytics','bi-bar-chart-fill'],['Resume Intelligence','bi-file-earmark-person-fill'],['AI Insights','bi-stars']]
   return <aside className="sidebar">
     <div className="brand"><span className="brand-mark"><i className="bi bi-stars"/></span><div><div className="brand-name">HireSense</div><div className="brand-sub">AI RECRUITMENT OS</div></div></div>
     <div className="nav-label">Workspace</div>
