@@ -1,59 +1,23 @@
 import { useEffect, useMemo, useState } from 'react'
-import { getCandidates } from '../services/api'
+import { getCandidates, getJobs, createCandidate, updateApplicationStage } from '../services/api'
+import ActionModal from '../components/ActionModal'
+import { downloadCsv } from '../utils/exportCsv'
 
-export default function Candidates() {
-  const [items, setItems] = useState([])
-  const [query, setQuery] = useState('')
-  const [stage, setStage] = useState('All')
-  const [role, setRole] = useState('All')
-  const [selected, setSelected] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-
-  useEffect(() => {
-    setLoading(true)
-    setError('')
-    getCandidates({ search: query, stage, role })
-      .then(data => setItems(data.items || []))
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false))
-  }, [query, stage, role])
-
-  const roles = useMemo(() => ['All', ...new Set(items.map(c => c.role))], [items])
-
-  return <>
-    <div className="page-title-row">
-      <div><div className="eyebrow">TALENT INTELLIGENCE</div><h1>Candidates</h1><p>Search, evaluate, and compare your active talent pool.</p></div>
-      <button className="btn btn-primary-custom"><i className="bi bi-person-plus me-2"/>Add Candidate</button>
-    </div>
-
-    {error && <div className="alert alert-warning">Backend unavailable: {error}</div>}
-    <div className="panel filters-panel mb-4">
-      <div className="search-wrap"><i className="bi bi-search"/><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search name, skills, role, or location..."/></div>
-      <select className="form-select filter-select" value={role} onChange={e => setRole(e.target.value)}>{roles.map(r => <option key={r}>{r}</option>)}</select>
-      <select className="form-select filter-select" value={stage} onChange={e => setStage(e.target.value)}><option>All</option>{['Applied','Screening','Shortlisted','Interview','Offer','Hired'].map(s => <option key={s}>{s}</option>)}</select>
-      <button className="btn btn-outline-soft"><i className="bi bi-sliders2 me-2"/>More filters</button>
-    </div>
-
-    <div className="panel">
-      <div className="panel-head"><div><h3>Candidate pool</h3><p>{loading ? 'Loading candidates...' : `${items.length} candidates match your current filters.`}</p></div><button className="text-btn"><i className="bi bi-download me-1"/> Export</button></div>
-      <div className="table-responsive"><table className="table align-middle candidate-table"><thead><tr><th>Candidate</th><th>Target role</th><th>Match</th><th>Skills</th><th>Experience</th><th>Stage</th><th></th></tr></thead><tbody>
-        {!loading && items.map(c => <tr key={c.application_id} onClick={() => setSelected(c)} className="clickable-row">
-          <td><div className="candidate-name"><div className="avatar-sm">{c.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><div><strong>{c.name}</strong><small>#{c.id} · {c.location}</small></div></div></td>
-          <td>{c.role}</td><td><span className="match-pill">{c.score}%</span></td>
-          <td><div className="skill-chips">{c.skills.slice(0,3).map(s => <span key={s}>{s}</span>)}{c.skills.length > 3 && <span>+{c.skills.length-3}</span>}</div></td>
-          <td>{c.experience} yrs</td><td><span className={`status ${c.stage.toLowerCase()}`}>{c.stage}</span></td><td><i className="bi bi-chevron-right text-muted"/></td>
-        </tr>)}
-      </tbody></table></div>
-    </div>
-
-    {selected && <div className="detail-drawer-backdrop" onClick={() => setSelected(null)}><aside className="detail-drawer" onClick={e => e.stopPropagation()}>
-      <div className="drawer-head"><div><div className="eyebrow">CANDIDATE PROFILE</div><h2>{selected.name}</h2><p>{selected.role} · {selected.location}</p></div><button className="icon-btn" onClick={() => setSelected(null)}><i className="bi bi-x-lg"/></button></div>
-      <div className="score-hero"><div><span>AI Match Score</span><strong>{selected.score}%</strong></div><div className="score-ring"><div>{Math.round(selected.score)}</div></div></div>
-      <div className="drawer-section"><h4>Fit snapshot</h4><div className="fit-grid"><div><span>Experience</span><b>{selected.experience} years</b></div><div><span>Stage</span><b>{selected.stage}</b></div><div><span>Source</span><b>{selected.source}</b></div><div><span>Applied</span><b>{selected.applied}</b></div></div></div>
-      <div className="drawer-section"><h4>Relevant skills</h4><div className="skill-chips large">{selected.skills.map(s => <span key={s}>{s}</span>)}</div></div>
-      <div className="drawer-section"><h4>AI recommendation</h4><div className="ai-mini"><i className="bi bi-stars"/><p>Strong fit for this role based on skills, experience, and current application stage. Review interview performance and role-specific requirements before final selection.</p></div></div>
-      <div className="drawer-actions"><button className="btn btn-outline-soft flex-grow-1">View resume</button><button className="btn btn-primary-custom flex-grow-1">Move stage</button></div>
-    </aside></div>}
-  </>
+export default function Candidates({onNavigate}) {
+ const [items,setItems]=useState([]); const [query,setQuery]=useState(''); const [stage,setStage]=useState('All'); const [role,setRole]=useState('All'); const [selected,setSelected]=useState(null); const [loading,setLoading]=useState(true); const [error,setError]=useState(''); const [showAdd,setShowAdd]=useState(false); const [more,setMore]=useState(false); const [source,setSource]=useState('All'); const [location,setLocation]=useState('All'); const [jobs,setJobs]=useState([]); const [form,setForm]=useState({name:'',email:'',location:'Remote',experience_years:1,skills:'Python, SQL',education:'B.Tech Computer Science',source:'Manual entry',job_id:''}); const [saving,setSaving]=useState(false)
+ async function load(){setLoading(true);setError('');try{const d=await getCandidates({search:query,stage,role});setItems(d.items||[])}catch(e){setError(e.message)}finally{setLoading(false)}}
+ useEffect(()=>{load()},[query,stage,role])
+ useEffect(()=>{getJobs().then(d=>setJobs(d.items||[])).catch(()=>{})},[])
+ const roles=useMemo(()=>['All',...new Set(items.map(c=>c.role))],[items]); const sources=useMemo(()=>['All',...new Set(items.map(c=>c.source))],[items]); const locations=useMemo(()=>['All',...new Set(items.map(c=>c.location))],[items]); const visible=useMemo(()=>items.filter(c=>(source==='All'||c.source===source)&&(location==='All'||c.location===location)),[items,source,location])
+ async function addCandidate(e){e.preventDefault();setSaving(true);setError('');try{await createCandidate({...form,experience_years:Number(form.experience_years),job_id:form.job_id?Number(form.job_id):null});setShowAdd(false);setForm({name:'',email:'',location:'Remote',experience_years:1,skills:'Python, SQL',education:'B.Tech Computer Science',source:'Manual entry',job_id:''});await load()}catch(err){setError(err.message)}finally{setSaving(false)}}
+ async function moveStage(next){if(!selected)return;try{await updateApplicationStage(selected.application_id,next);setSelected({...selected,stage:next});await load()}catch(err){setError(err.message)}}
+ return <>
+  <div className="page-title-row"><div><div className="eyebrow">TALENT INTELLIGENCE</div><h1>Candidates</h1><p>Search, evaluate, and compare your active talent pool.</p></div><button className="btn btn-primary-custom" onClick={()=>setShowAdd(true)}><i className="bi bi-person-plus me-2"/>Add Candidate</button></div>
+  {error&&<div className="alert alert-warning">{error}</div>}
+  <div className="panel filters-panel mb-4"><div className="search-wrap"><i className="bi bi-search"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search name, skills, role, or location..."/></div><select className="form-select filter-select" value={role} onChange={e=>setRole(e.target.value)}>{roles.map(r=><option key={r}>{r}</option>)}</select><select className="form-select filter-select" value={stage} onChange={e=>setStage(e.target.value)}><option>All</option>{['Applied','Screening','Shortlisted','Interview','Offer','Hired'].map(s=><option key={s}>{s}</option>)}</select><button className={`btn ${more?'btn-primary-custom':'btn-outline-soft'}`} onClick={()=>setMore(!more)}><i className="bi bi-sliders2 me-2"/>More filters</button></div>
+  {more&&<div className="panel mb-4"><div className="row g-3"><div className="col-md-6"><label className="form-label">Source</label><select className="form-select" value={source} onChange={e=>setSource(e.target.value)}>{sources.map(x=><option key={x}>{x}</option>)}</select></div><div className="col-md-6"><label className="form-label">Location</label><select className="form-select" value={location} onChange={e=>setLocation(e.target.value)}>{locations.map(x=><option key={x}>{x}</option>)}</select></div></div></div>}
+  <div className="panel"><div className="panel-head"><div><h3>Candidate pool</h3><p>{loading?'Loading candidates...':`${visible.length} candidates match your current filters.`}</p></div><button className="text-btn" onClick={()=>downloadCsv('hiresense-candidates.csv',visible.map(c=>({id:c.id,name:c.name,email:c.email,role:c.role,location:c.location,experience:c.experience,score:c.score,stage:c.stage,source:c.source}))) }><i className="bi bi-download me-1"/> Export</button></div><div className="table-responsive"><table className="table align-middle candidate-table"><thead><tr><th>Candidate</th><th>Target role</th><th>Match</th><th>Skills</th><th>Experience</th><th>Stage</th><th></th></tr></thead><tbody>{!loading&&visible.map(c=><tr key={c.application_id} onClick={()=>setSelected(c)} className="clickable-row"><td><div className="candidate-name"><div className="avatar-sm">{c.name.split(' ').map(x=>x[0]).join('').slice(0,2)}</div><div><strong>{c.name}</strong><small>#{c.id} · {c.location}</small></div></div></td><td>{c.role}</td><td><span className="match-pill">{c.score}%</span></td><td><div className="skill-chips">{c.skills.slice(0,3).map(s=><span key={s}>{s}</span>)}{c.skills.length>3&&<span>+{c.skills.length-3}</span>}</div></td><td>{c.experience} yrs</td><td><span className={`status ${c.stage.toLowerCase()}`}>{c.stage}</span></td><td><i className="bi bi-chevron-right text-muted"/></td></tr>)}</tbody></table></div></div>
+  {selected&&<div className="detail-drawer-backdrop" onClick={()=>setSelected(null)}><aside className="detail-drawer" onClick={e=>e.stopPropagation()}><div className="drawer-head"><div><div className="eyebrow">CANDIDATE PROFILE</div><h2>{selected.name}</h2><p>{selected.role} · {selected.location}</p></div><button className="icon-btn" onClick={()=>setSelected(null)}><i className="bi bi-x-lg"/></button></div><div className="score-hero"><div><span>AI Match Score</span><strong>{selected.score}%</strong></div><div className="score-ring"><div>{Math.round(selected.score)}</div></div></div><div className="drawer-section"><h4>Fit snapshot</h4><div className="fit-grid"><div><span>Experience</span><b>{selected.experience} years</b></div><div><span>Stage</span><b>{selected.stage}</b></div><div><span>Source</span><b>{selected.source}</b></div><div><span>Applied</span><b>{selected.applied}</b></div></div></div><div className="drawer-section"><h4>Relevant skills</h4><div className="skill-chips large">{selected.skills.map(s=><span key={s}>{s}</span>)}</div></div><div className="drawer-section"><h4>Actions</h4><div className="drawer-actions"><button className="btn btn-outline-soft flex-grow-1" onClick={()=>onNavigate?.('Resume Intelligence')}>View resume</button><button className="btn btn-primary-custom flex-grow-1" onClick={()=>moveStage(selected.stage==='Applied'?'Screening':selected.stage==='Screening'?'Shortlisted':selected.stage==='Shortlisted'?'Interview':selected.stage==='Interview'?'Offer':'Hired')}>Move stage</button></div></div></aside></div>}
+  {showAdd&&<ActionModal title="Add candidate" subtitle="Create a candidate and optionally attach an application." onClose={()=>setShowAdd(false)} footer={<><button className="btn btn-outline-soft" onClick={()=>setShowAdd(false)}>Cancel</button><button form="candidate-form" className="btn btn-primary-custom" disabled={saving}>{saving?'Saving…':'Add candidate'}</button></>}><form id="candidate-form" onSubmit={addCandidate} className="vstack gap-3"><div className="row g-3"><div className="col-md-6"><label className="form-label">Name</label><input required className="form-control" value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/></div><div className="col-md-6"><label className="form-label">Email</label><input required type="email" className="form-control" value={form.email} onChange={e=>setForm({...form,email:e.target.value})}/></div></div><div className="row g-3"><div className="col-md-6"><label className="form-label">Location</label><input className="form-control" value={form.location} onChange={e=>setForm({...form,location:e.target.value})}/></div><div className="col-md-6"><label className="form-label">Experience (years)</label><input type="number" min="0" step="0.1" className="form-control" value={form.experience_years} onChange={e=>setForm({...form,experience_years:e.target.value})}/></div></div><div><label className="form-label">Skills</label><input className="form-control" value={form.skills} onChange={e=>setForm({...form,skills:e.target.value})} placeholder="Python, SQL, Power BI"/></div><div><label className="form-label">Apply to job</label><select className="form-select" value={form.job_id} onChange={e=>setForm({...form,job_id:e.target.value})}><option value="">No application</option>{jobs.filter(j=>j.status==='Open').map(j=><option key={j.id} value={String(j.id)}>{j.title}</option>)}</select></div></form></ActionModal>}
+ </>
 }
