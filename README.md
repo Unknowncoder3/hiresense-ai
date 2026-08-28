@@ -45,10 +45,18 @@ AI-powered Recruitment Intelligence Dashboard for recruiter analytics, candidate
 - PBKDF2-HMAC password hashing
 - Protected recruitment, resume, and Copilot endpoints
 - Login, registration, session restore, and sign-out UI
-- GitHub Actions CI for backend auth tests and frontend builds
-- Production Dockerfiles for backend and frontend
-- Nginx SPA configuration
+- GitHub Actions CI
+- Production Dockerfiles and Nginx SPA configuration
 - Environment-based secrets and configuration
+
+### Phase 7 — Production Polish ✅
+- API security headers (`nosniff`, frame protection, referrer policy, permissions policy)
+- Full backend test suite executed in CI
+- Reproducible frontend build in CI
+- Production-ready FastAPI and Nginx containers
+- Clean environment/secrets workflow
+- Deployment-oriented documentation
+- Portfolio-ready project structure and README
 
 ## Run locally
 
@@ -108,11 +116,11 @@ OpenAI is optional. The Hiring Copilot can answer supported recruitment question
 - `POST /api/ai/copilot`
 
 ## CI
-GitHub Actions runs backend authentication tests and a production frontend build on pushes and pull requests to `main`.
+GitHub Actions runs the backend test suite and a production frontend build on pushes and pull requests to `main`.
 
 ## Production containers
-- `backend/Dockerfile` runs FastAPI with Uvicorn.
-- `frontend/Dockerfile` builds React and serves it through Nginx.
+- `backend/Dockerfile` runs FastAPI with Uvicorn. fileciteturn160file0L1-L6
+- `frontend/Dockerfile` builds React and serves it through Nginx. fileciteturn161file0L1-L6
 - Set `DATABASE_URL`, `CORS_ORIGINS`, `AUTH_SECRET`, `OPENAI_API_KEY`, and admin credentials in the deployment environment.
 
 ## Security notes
