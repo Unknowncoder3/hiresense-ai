@@ -1,6 +1,20 @@
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000/api'
-export async function getDashboard(){
-  const res = await fetch(`${API_BASE}/dashboard`)
-  if(!res.ok) throw new Error(`API request failed: ${res.status}`)
+
+async function request(path, options = {}) {
+  const res = await fetch(`${API_BASE}${path}`, options)
+  if (!res.ok) throw new Error(`API request failed: ${res.status}`)
   return res.json()
 }
+
+export function getDashboard() { return request('/dashboard') }
+export function getCandidates(params = {}) {
+  const query = new URLSearchParams(Object.entries(params).filter(([, value]) => value && value !== 'All'))
+  return request(`/candidates${query.toString() ? `?${query}` : ''}`)
+}
+export function getJobs(params = {}) {
+  const query = new URLSearchParams(Object.entries(params).filter(([, value]) => value && value !== 'All'))
+  return request(`/jobs${query.toString() ? `?${query}` : ''}`)
+}
+export function getApplications() { return request('/applications') }
+export function getInterviews() { return request('/interviews') }
+export function getAnalytics() { return request('/analytics') }
