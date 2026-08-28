@@ -3,6 +3,7 @@ from sqlalchemy import Date, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.session import Base
 
+
 class Job(Base):
     __tablename__ = "jobs"
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -13,6 +14,7 @@ class Job(Base):
     openings: Mapped[int] = mapped_column(Integer, default=1)
     created_at: Mapped[date] = mapped_column(Date, nullable=False)
     applications = relationship("Application", back_populates="job")
+
 
 class Candidate(Base):
     __tablename__ = "candidates"
@@ -26,6 +28,8 @@ class Candidate(Base):
     source: Mapped[str] = mapped_column(String(80), default="LinkedIn")
     created_at: Mapped[date] = mapped_column(Date, nullable=False)
     applications = relationship("Application", back_populates="candidate")
+    resumes = relationship("Resume", back_populates="candidate", cascade="all, delete-orphan")
+
 
 class Application(Base):
     __tablename__ = "applications"
@@ -37,6 +41,7 @@ class Application(Base):
     applied_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     candidate = relationship("Candidate", back_populates="applications")
     job = relationship("Job", back_populates="applications")
+
 
 class Interview(Base):
     __tablename__ = "interviews"
