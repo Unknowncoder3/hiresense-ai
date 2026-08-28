@@ -1,11 +1,12 @@
 # HireSense AI
 
-AI-powered Recruitment Intelligence Dashboard — a production-style portfolio project for recruiter analytics, candidate intelligence, job matching, and hiring insights.
+AI-powered Recruitment Intelligence Dashboard — a production-style portfolio project for recruiter analytics, candidate intelligence, job matching, resume intelligence, and hiring insights.
 
 ## Stack
 - Frontend: React + Vite 7 + Bootstrap 5.3 + Recharts
 - Backend: FastAPI + SQLAlchemy 2 + PostgreSQL
 - Analytics/ML: Pandas + NumPy + Scikit-learn
+- Resume intelligence: PyPDF + python-docx + TF-IDF semantic matching
 - AI: OpenAI API (planned for Hiring Copilot)
 
 ## Progress
@@ -29,8 +30,19 @@ AI-powered Recruitment Intelligence Dashboard — a production-style portfolio p
 - REST endpoints for candidates, jobs, applications, interviews and analytics
 - Search and filter parameters for candidates and jobs
 - React service layer connected to FastAPI
-- Candidate, jobs, applications, interviews and analytics pages now read from PostgreSQL
+- Recruitment pages backed by PostgreSQL
 - Live pipeline counts and recruitment metrics
+
+### Phase 4 — Resume Intelligence ✅
+- PDF, DOCX and TXT resume parsing
+- Skill extraction from resume text
+- Experience extraction
+- Resume metadata persisted in PostgreSQL
+- Candidate profile enrichment from parsed resumes
+- Explainable candidate-job matching
+- Match score breakdown: skills, experience, semantic relevance
+- Skill-gap recommendations
+- Resume Intelligence workspace in the React app
 
 ## Run locally
 
@@ -47,7 +59,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 python -m app.db.seed
-uvicorn app.main:app --reload --port 8000
+python -m uvicorn app.main:app --reload --port 8000
 ```
 
 API docs: http://localhost:8000/docs
@@ -61,7 +73,12 @@ npm run dev
 
 Open http://localhost:5173
 
-## API endpoints
+## Resume Intelligence API
+- `POST /api/resume/upload/{candidate_id}` — upload and parse a PDF/DOCX/TXT resume
+- `GET /api/resume/{candidate_id}` — retrieve the latest parsed resume
+- `POST /api/resume/match/{candidate_id}/{job_id}` — calculate an explainable job-match score
+
+## Core API endpoints
 - `GET /api/health`
 - `GET /api/dashboard`
 - `GET /api/candidates?search=&stage=&role=`
@@ -71,6 +88,5 @@ Open http://localhost:5173
 - `GET /api/analytics`
 
 ## Upcoming phases
-- Phase 4: Resume parsing, skill extraction and candidate-job matching
-- Phase 5: AI Hiring Copilot with explainable recommendations
-- Phase 6: Authentication, testing and deployment
+- Phase 5: AI Hiring Copilot with natural-language recruitment analysis
+- Phase 6: Authentication, deeper testing, CI, and deployment
