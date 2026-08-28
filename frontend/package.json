@@ -18,9 +18,9 @@
   "devDependencies": {
     "@vitejs/plugin-react": "5.1.4",
     "vite": "7.3.6",
-    "@rollup/rollup-darwin-arm64": "4.52.5"
+    "@rollup/rollup-darwin-arm64": "4.62.3"
   },
   "overrides": {
-    "@rollup/rollup-darwin-arm64": "4.52.5"
+    "@rollup/rollup-darwin-arm64": "4.62.3"
   }
 }
