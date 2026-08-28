@@ -6,10 +6,11 @@ import Jobs from './pages/Jobs'
 import Applications from './pages/Applications'
 import Interviews from './pages/Interviews'
 import Analytics from './pages/Analytics'
+import ResumeIntelligence from './pages/ResumeIntelligence'
 import AIInsights from './pages/AIInsights'
 import {getDashboard} from './services/api'
 
-const pages={Dashboard,Candidates,Jobs,Applications,Interviews,Analytics,'AI Insights':AIInsights}
+const pages={Dashboard,Candidates,Jobs,Applications,Interviews,Analytics,'Resume Intelligence':ResumeIntelligence,'AI Insights':AIInsights}
 export default function App(){
  const [active,setActive]=useState('Dashboard'); const [data,setData]=useState(null); const [loading,setLoading]=useState(true); const [error,setError]=useState('')
  useEffect(()=>{getDashboard().then(setData).catch(e=>setError(e.message)).finally(()=>setLoading(false))},[])
