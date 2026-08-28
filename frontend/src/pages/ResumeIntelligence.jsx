@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { getCandidates, getJobs, matchCandidate, uploadResume } from '../services/api'
+import './ResumeIntelligence.css'
 
 export default function ResumeIntelligence() {
   const [candidates, setCandidates] = useState([])
@@ -23,7 +24,6 @@ export default function ResumeIntelligence() {
   }, [])
 
   const selectedCandidate = useMemo(() => candidates.find(c => String(c.id) === String(candidateId)), [candidates, candidateId])
-  const selectedJob = useMemo(() => jobs.find(j => String(j.id).replace('JOB-', '') === String(jobId)), [jobs, jobId])
 
   async function handleUpload() {
     setError('')
