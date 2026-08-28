@@ -1,0 +1,1 @@
+export default function ChartCard({title,subtitle,children,action}){return <div className="panel chart-panel"><div className="panel-head"><div><h3>{title}</h3>{subtitle&&<p>{subtitle}</p>}</div>{action||null}</div>{children}</div>}

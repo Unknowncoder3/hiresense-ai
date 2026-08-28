@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: hiresense-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hiresense
+      POSTGRES_USER: hiresense
+      POSTGRES_PASSWORD: hiresense
+    ports:
+      - "5432:5432"
+    volumes:
+      - hiresense_pgdata:/var/lib/postgresql/data
+
+volumes:
+  hiresense_pgdata:
