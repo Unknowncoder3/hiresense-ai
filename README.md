@@ -1,130 +1,250 @@
 # HireSense AI
 
-AI-powered Recruitment Intelligence Dashboard for recruiter analytics, candidate intelligence, resume matching, and explainable hiring decision support.
+<p align="center">
+  <strong>AI-powered Recruitment Intelligence Platform for candidate screening, resume intelligence, hiring analytics, and explainable decision support.</strong>
+</p>
 
-## Stack
-- Frontend: React + Vite 7 + Bootstrap 5.3 + Recharts
-- Backend: FastAPI + SQLAlchemy 2 + PostgreSQL
-- Analytics/ML: Pandas + NumPy + Scikit-learn
-- Resume intelligence: PyPDF + python-docx + TF-IDF semantic matching
-- AI: OpenAI Responses API (optional) with deterministic fallback
+<p align="center">
+  <a href="https://hiresense-ai-frontend.netlify.app/">🌐 Live Demo</a> ·
+  <a href="https://hiresense-ai-ybbx.onrender.com/docs">📚 API Docs</a> ·
+  <a href="https://github.com/Unknowncoder3/hiresense-ai">💻 Source Code</a>
+</p>
 
-## Progress
-### Phase 1 — Foundation ✅
-- PostgreSQL schema and seed data
-- FastAPI health and dashboard API
-- React recruiter dashboard
-- Docker Compose PostgreSQL
+---
 
-### Phase 2 — Product UI ✅
-- Candidates, Jobs, Applications, Interviews, Analytics
-- AI Hiring Copilot workspace
-- Responsive enterprise-style UI
+## Overview
 
-### Phase 3 — Live Data Layer ✅
-- PostgreSQL-backed recruitment APIs
-- Search/filter parameters
-- React service layer connected to FastAPI
+HireSense AI is a production-style recruitment operations dashboard that connects structured hiring data, resume intelligence, explainable candidate-job matching, interview operations, analytics, and AI-assisted decision support in one recruiter workspace.
 
-### Phase 4 — Resume Intelligence ✅
-- PDF, DOCX and TXT parsing
-- Skill and experience extraction
-- Resume persistence
-- Explainable candidate-job matching
-- Skill-gap recommendations
+The deployed application uses a React frontend, FastAPI backend, and PostgreSQL database.
 
-### Phase 5 — AI Hiring Copilot ✅
-- Natural-language recruitment questions
-- PostgreSQL-grounded recruitment context
-- Candidate ranking and hiring diagnostics
-- Explainable signals and next actions
-- Optional OpenAI integration with deterministic fallback
+## Live Preview
 
-### Phase 6 — Security, Quality & Deployment ✅
-- JWT-based recruiter authentication
-- PBKDF2-HMAC password hashing
-- Protected recruitment, resume, and Copilot endpoints
-- Login, registration, session restore, and sign-out UI
-- GitHub Actions CI
-- Production Dockerfiles and Nginx SPA configuration
-- Environment-based secrets and configuration
+<p align="center">
+  <a href="https://hiresense-ai-frontend.netlify.app/">
+    <img src="https://image.thum.io/get/width/1400/crop/900/https://hiresense-ai-frontend.netlify.app/" alt="HireSense AI live recruitment dashboard" width="96%" />
+  </a>
+</p>
 
-### Phase 7 — Production Polish ✅
-- API security headers (`nosniff`, frame protection, referrer policy, permissions policy)
-- Full backend test suite executed in CI
-- Reproducible frontend build in CI
-- Production-ready FastAPI and Nginx containers
-- Clean environment/secrets workflow
-- Deployment-oriented documentation
-- Portfolio-ready project structure and README
+<p align="center"><sub>Live recruiter workspace with hiring analytics, job pipelines, resume intelligence, and AI Hiring Copilot.</sub></p>
 
-## Run locally
+## Core Capabilities
 
-### Database
+- **Recruitment Dashboard** — live hiring KPIs, funnel progression, and monthly recruitment trends.
+- **Candidate Intelligence** — candidate search, skills, experience, stage tracking, and explainable match scores.
+- **Job Management** — create and monitor roles, priorities, locations, applicant counts, shortlist counts, and pipelines.
+- **Application Pipeline** — move candidates through Applied, Screening, Shortlisted, Interview, Offer, and Hired stages.
+- **Interview Operations** — schedule interviews, track status, interviewer assignments, and feedback workflows.
+- **Recruitment Analytics** — time-to-hire, offer acceptance, source conversion, hiring outcomes, and operational signals.
+- **Resume Intelligence** — parse PDF, DOCX, and TXT resumes and extract structured skills and experience signals.
+- **Explainable Matching** — compare a candidate with an open role using skill, experience, and semantic relevance signals.
+- **AI Hiring Copilot** — ask recruitment questions about candidates, jobs, funnel performance, sourcing, and recommended next actions.
+- **Production Deployment** — Netlify frontend, Render FastAPI service, and Render PostgreSQL.
+
+## Tech Stack
+
+| Layer | Technologies |
+|---|---|
+| Frontend | React, Vite 7, Bootstrap 5.3, Recharts |
+| Backend | FastAPI, SQLAlchemy 2, Uvicorn |
+| Database | PostgreSQL |
+| Analytics / ML | Pandas, NumPy, Scikit-learn |
+| Resume Intelligence | PyPDF, python-docx, TF-IDF semantic matching |
+| AI | OpenAI API (optional) + deterministic fallback |
+| Security | JWT auth, PBKDF2-HMAC password hashing, CORS, security headers |
+| Deployment | Netlify, Render, Docker |
+
+## Architecture
+
+```text
+                         ┌──────────────────────┐
+                         │      Recruiter       │
+                         └──────────┬───────────┘
+                                    │ HTTPS
+                                    ▼
+                         ┌──────────────────────┐
+                         │ Netlify              │
+                         │ React + Vite         │
+                         └──────────┬───────────┘
+                                    │ REST API
+                                    ▼
+                         ┌──────────────────────┐
+                         │ Render               │
+                         │ FastAPI backend      │
+                         └──────────┬───────────┘
+                                    │ SQLAlchemy
+                                    ▼
+                         ┌──────────────────────┐
+                         │ Render PostgreSQL    │
+                         │ Recruitment data     │
+                         └──────────────────────┘
+
+                         Optional AI path
+                         FastAPI → OpenAI API
+                         (deterministic fallback available)
+```
+
+## Product Modules
+
+### Dashboard
+Recruitment KPIs, hiring funnel, application activity, and hiring trends.
+
+### Candidates
+Candidate pool search, skills, experience, role alignment, match scores, and pipeline stages.
+
+### Jobs
+Open roles, priority, department, location, employment type, applicant counts, and pipeline access.
+
+### Applications
+Stage-based candidate progression with filters, actions, and recruiter workflow controls.
+
+### Interviews
+Upcoming and completed interviews, scheduling, interviewer assignment, round tracking, and feedback.
+
+### Analytics
+Recruitment performance metrics including cost per hire, time to hire, offer acceptance, source conversion, and monthly hiring activity.
+
+### Resume Intelligence
+Resume upload and parsing for PDF, DOCX, and TXT inputs, followed by structured extraction and candidate-job matching.
+
+### AI Hiring Copilot
+Grounded recruitment analysis over PostgreSQL data with explainable signals and operational recommendations. OpenAI is optional.
+
+## Explainable Decision Support
+
+HireSense is designed as **decision support, not blind automation**. Candidate-job matching and AI-assisted insights expose the signals behind the analysis so recruiters can review evidence and retain human control over hiring decisions.
+
+## Development Milestones
+
+The application was built incrementally across seven stages:
+
+1. **Foundation** — PostgreSQL schema, seed data, FastAPI foundation, and initial React dashboard.
+2. **Product UI** — recruiter-facing Candidates, Jobs, Applications, Interviews, Analytics, and Copilot modules.
+3. **Live Data Layer** — PostgreSQL-backed APIs, search/filter support, and frontend service integration.
+4. **Resume Intelligence** — PDF/DOCX/TXT parsing, extraction, persistence, explainable matching, and skill-gap recommendations.
+5. **AI Hiring Copilot** — natural-language recruitment analysis, candidate ranking, hiring diagnostics, and next actions.
+6. **Security & Quality** — authentication, protected routes, CI, environment configuration, and production setup.
+7. **Production Polish** — security headers, reproducible builds, deployment configuration, containers, and portfolio documentation.
+
+## Run Locally
+
+### 1. Start PostgreSQL
+
 ```bash
 docker compose up -d db
 ```
 
-### Backend
+### 2. Configure and run the backend
+
 ```bash
 cd backend
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
+```
+
+Set the required values in `.env`, then run:
+
+```bash
 python -m app.db.seed
 python -m uvicorn app.main:app --reload --port 8000
 ```
 
-API docs: http://localhost:8000/docs
+API docs: `http://localhost:8000/docs`
 
-### Frontend
+### 3. Run the frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-Open http://localhost:5173
+Open `http://localhost:5173`.
+
+## Environment Variables
+
+Backend deployments should provide:
+
+```text
+DATABASE_URL=...
+APP_ENV=production
+CORS_ORIGINS=https://hiresense-ai-frontend.netlify.app
+AUTH_SECRET=...
+OPENAI_API_KEY=...        # optional
+OPENAI_MODEL=...          # optional
+ADMIN_EMAIL=...
+ADMIN_PASSWORD=...
+```
+
+Never commit real credentials, database URLs, or API keys.
 
 ## Authentication
-The seed command creates a development recruiter account using `ADMIN_EMAIL` and `ADMIN_PASSWORD` from `backend/.env`.
 
-Default local credentials:
-- Email: `admin@hiresense.ai`
-- Password: `HireSense123!`
+Protected API operations use bearer authentication. The development seed reads `ADMIN_EMAIL` and `ADMIN_PASSWORD` from the backend environment.
 
-Change these values before any public deployment.
+For production deployment, create dedicated credentials and a strong random `AUTH_SECRET`.
 
-## OpenAI integration
-OpenAI is optional. The Hiring Copilot can answer supported recruitment questions using deterministic PostgreSQL analysis without a key. To enable live LLM responses, put `OPENAI_API_KEY` in `backend/.env` and keep it server-side. Never expose it to React or commit it to Git.
+## OpenAI Integration
 
-## API endpoints
-- `GET /api/health`
-- `POST /api/auth/login`
-- `POST /api/auth/register`
-- `GET /api/auth/me`
-- `GET /api/dashboard`
-- `GET /api/candidates?search=&stage=&role=`
-- `GET /api/jobs?search=&status=`
-- `GET /api/applications`
-- `GET /api/interviews`
-- `GET /api/analytics`
-- `POST /api/resume/upload/{candidate_id}`
-- `GET /api/resume/{candidate_id}`
-- `POST /api/resume/match/{candidate_id}/{job_id}`
-- `POST /api/ai/copilot`
+OpenAI is **optional**. Supported Hiring Copilot questions can be answered using deterministic PostgreSQL-backed analysis without an API key. When configured, the backend can use OpenAI for live LLM-assisted responses.
 
-## CI
-GitHub Actions runs the backend test suite and a production frontend build on pushes and pull requests to `main`.
+Keep `OPENAI_API_KEY` strictly server-side. Never expose it through React or commit it to Git.
 
-## Production containers
-- `backend/Dockerfile` runs FastAPI with Uvicorn. fileciteturn160file0L1-L6
-- `frontend/Dockerfile` builds React and serves it through Nginx. fileciteturn161file0L1-L6
-- Set `DATABASE_URL`, `CORS_ORIGINS`, `AUTH_SECRET`, `OPENAI_API_KEY`, and admin credentials in the deployment environment.
+## API Surface
 
-## Security notes
-- `.env` is ignored by Git.
-- API keys remain server-side.
-- Protected endpoints require a bearer token.
-- Use a strong random `AUTH_SECRET` in production.
+```text
+GET  /api/health
+POST /api/auth/login
+POST /api/auth/register
+GET  /api/auth/me
+GET  /api/dashboard
+GET  /api/candidates?search=&stage=&role=
+GET  /api/jobs?search=&status=
+GET  /api/applications
+GET  /api/interviews
+GET  /api/analytics
+POST /api/resume/upload/{candidate_id}
+GET  /api/resume/{candidate_id}
+POST /api/resume/match/{candidate_id}/{job_id}
+POST /api/ai/copilot
+```
+
+## CI & Deployment
+
+GitHub Actions validates the backend test suite and frontend production build on pushes and pull requests to `main`.
+
+Production topology:
+
+```text
+GitHub
+ ├── frontend/  → Netlify
+ └── backend/   → Render
+                  └── PostgreSQL
+```
+
+## Security
+
+- Environment files are ignored by Git.
+- Secrets stay server-side.
+- Protected endpoints require authentication.
+- Passwords use PBKDF2-HMAC hashing.
+- Security headers are applied by the API.
+- CORS is controlled through the deployment environment.
+- Resume/job matching is presented as explainable decision support.
+
+## Live Deployment
+
+- **Frontend:** https://hiresense-ai-frontend.netlify.app/
+- **Backend:** https://hiresense-ai-ybbx.onrender.com/
+- **Swagger:** https://hiresense-ai-ybbx.onrender.com/docs
+- **Repository:** https://github.com/Unknowncoder3/hiresense-ai
+
+## Portfolio Note
+
+This project demonstrates end-to-end product thinking across frontend engineering, REST APIs, relational data, analytics, ML-assisted matching, document processing, authentication, deployment, and responsible AI UX.
+
+## License
+
+Portfolio/demo project created for educational and professional demonstration purposes.
