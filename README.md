@@ -7,7 +7,7 @@ AI-powered Recruitment Intelligence Dashboard — a production-style portfolio p
 - Backend: FastAPI + SQLAlchemy 2 + PostgreSQL
 - Analytics/ML: Pandas + NumPy + Scikit-learn
 - Resume intelligence: PyPDF + python-docx + TF-IDF semantic matching
-- AI: OpenAI API (planned for Hiring Copilot)
+- AI: OpenAI Responses API with configurable model + deterministic fallback
 
 ## Progress
 ### Phase 1 — Foundation ✅
@@ -43,6 +43,17 @@ AI-powered Recruitment Intelligence Dashboard — a production-style portfolio p
 - Match score breakdown: skills, experience, semantic relevance
 - Skill-gap recommendations
 - Resume Intelligence workspace in the React app
+
+### Phase 5 — AI Hiring Copilot ✅
+- Natural-language recruitment questions
+- PostgreSQL-grounded recruitment context
+- Candidate ranking responses
+- Sourcing and hiring-funnel diagnostics
+- Role attention recommendations
+- Explainable signals and next actions
+- OpenAI Responses API integration
+- Automatic deterministic fallback when no API key is configured
+- Human-in-the-loop hiring guidance
 
 ## Run locally
 
@@ -86,7 +97,16 @@ Open http://localhost:5173
 - `GET /api/applications`
 - `GET /api/interviews`
 - `GET /api/analytics`
+- `POST /api/ai/copilot`
+
+## OpenAI configuration
+Add these to `backend/.env` for live LLM responses:
+```env
+OPENAI_API_KEY=your_api_key_here
+OPENAI_MODEL=gpt-5.6-luna
+```
+
+Without an API key, `/api/ai/copilot` still returns deterministic recruitment analysis from PostgreSQL.
 
 ## Upcoming phases
-- Phase 5: AI Hiring Copilot with natural-language recruitment analysis
-- Phase 6: Authentication, deeper testing, CI, and deployment
+- Phase 6: Authentication, deeper testing, CI, audit logging, and deployment
